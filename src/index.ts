@@ -1,16 +1,13 @@
-type User = {
-    name: string;
-    age: number;
-  };
-  
-  function isAdult(user: User): boolean {
-    return user.age >= 18;
-  }
-  
-  const justine: User = {
-    name: 'Justine',
-    age: 23,
-  };
-  
-  const isJustineAnAdult: boolean = isAdult(justine);
-  
+import  Express  from "express";
+
+const app = Express();
+const port = 3000; 
+
+app.get('/api' , (req ,res )=>{
+  res.send("Api Page !");
+})
+
+app.listen(port , ()=> {
+  console.log(`Server Started at port : ${port} !`);
+
+})
