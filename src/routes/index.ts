@@ -1,5 +1,5 @@
 import express from 'express';
-import students from './api/students';
+import students from './api/Resizer';
 
 const routes = express.Router();
 
