@@ -1,13 +1,11 @@
 import  Express  from "express";
+import routes from "./routes/index";
 
 const app = Express();
 const port = 3000; 
 
-app.get('/api' , (req ,res )=>{
-  res.send("Api Page !");
-})
+app.use('/api' , routes);
 
 app.listen(port , ()=> {
   console.log(`Server Started at port : ${port} !`);
-
 })
