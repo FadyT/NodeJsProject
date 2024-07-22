@@ -1,9 +1,9 @@
 import express from 'express';
-import students from './api/Resizer';
+import resizer from './api/Resizer';
 
 const routes = express.Router();
 
-routes.use('/students' , students);
+routes.use('/resizer' , resizer);
 
 routes.get('/' , (req ,res )=>{
     res.send("Main api route !");
