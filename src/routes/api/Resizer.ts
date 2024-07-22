@@ -26,6 +26,9 @@ async function resizeImage(w : Number ,  h : Number, picName : String , res :any
 
     
     try {
+    if(!picName || !w || !h){
+      throw new Error("missing data");
+    }
     //if(process.cwd() +'/src/images/resized/sammy-resized.png)
     await sharp(`./src/images/${picName}.png`)
       .resize({
@@ -37,8 +40,12 @@ async function resizeImage(w : Number ,  h : Number, picName : String , res :any
       res.sendFile(process.cwd() +`/src/images/resized/${picName}-resized.png`);
   } catch (error) {
     //console.log(error);
-    res.send("<p>File Not Found please check the name </p>");
-    console.log("File not Found !");
+    if(error == "Error: missing data"){
+    res.send("<p>please enter image name , width & height </p>");
+    }else{
+      res.send("<p>File Not Found please check the name </p>");
+    }
+    console.log("File not Found ! " + error);
   }
 }
 
@@ -51,7 +58,7 @@ resizer.get('/' , (req , res ) =>{
         console.log("file already exists ");
         res.sendFile(process.cwd() +`/src/images/resized/${req.query.name}-resized.png`);
       }else{
-        console.log("file not found ");
+        console.log("resized file not found ");
         resizeImage(Number(req.query.width) ,Number( req.query.height ) ,String( req.query.name) , res);
       }
 
