@@ -7,10 +7,24 @@ const resizer = Express.Router();
 const sharp = require("sharp");
 
 
+function checkFileExist (path: String): boolean{
+  
+      // Check if the file exists in the current directory.
+      const file = `${process.cwd()}${path}`;
+      access(file, constants.F_OK, (check) => {
+        if(check != null){
+          return false;
+        }else{
+          return true;
+        }
+      });
+      return false;
+
+}
 
 async function resizeImage(w : Number ,  h : Number, picName : String , res :any) {
 
-
+    
     try {
     //if(process.cwd() +'/src/images/resized/sammy-resized.png)
     await sharp(`./src/images/${picName}.png`)
@@ -18,11 +32,13 @@ async function resizeImage(w : Number ,  h : Number, picName : String , res :any
         width: w,
         height: h
       })
-      .toFile(`./src/images/resized/${picName}.png`);
+      .toFile(`./src/images/resized/${picName}-resized.png`);
       console.log("resized image saved !");
-      res.sendFile(process.cwd() +`/src/images/resized/${picName}.png`);
+      res.sendFile(process.cwd() +`/src/images/resized/${picName}-resized.png`);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
+    res.send("<p>File Not Found please check the name </p>");
+    console.log("File not Found !");
   }
 }
 
@@ -31,18 +47,9 @@ resizer.get('/' , (req , res ) =>{
       let fileExist:boolean = false;
 
       // Check if the file exists in the current directory.
-      const file = `${process.cwd()}/src/images/resized/sammy-resized.png`;
-      access(file, constants.F_OK, (check) => {
-        if(check != null){
-          fileExist = false;
-        }else{
-          fileExist = true;
-        }
-      });
-
-      if(fileExist){
+      if(checkFileExist(`${process.cwd()}/src/images/resized/${req.query.name}-resized.png`)){
         console.log("file already exists ");
-        res.sendFile(process.cwd() +`/src/images/resized/${req.query.name}.png`);
+        res.sendFile(process.cwd() +`/src/images/resized/${req.query.name}-resized.png`);
       }else{
         console.log("file not found ");
         resizeImage(Number(req.query.width) ,Number( req.query.height ) ,String( req.query.name) , res);
