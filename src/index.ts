@@ -10,3 +10,8 @@ app.use(Express.static("./src/images"));
 app.listen(port , ()=> {
   console.log(`Server Started at port : ${port} !`);
 })
+function func (){
+  return ''
+}
+
+export default func;
