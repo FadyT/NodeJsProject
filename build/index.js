@@ -12,7 +12,7 @@ app.use(express_1.default.static("./src/images"));
 app.listen(port, () => {
     console.log(`Server Started at port : ${port} !`);
 });
-function func() {
-    return '';
+function func(i) {
+    return i * i;
 }
 exports.default = func;

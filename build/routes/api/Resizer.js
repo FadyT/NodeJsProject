@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const node_fs_1 = require("node:fs");
 const resizer = express_1.default.Router();
+const resizerTestRoute = express_1.default.Router();
 const sharp = require("sharp");
 function checkFileExist(path) {
     // Check if the file exists in the current directory.
