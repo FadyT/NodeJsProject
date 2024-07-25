@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "lint": "eslint build/*.js",
+    "lint": "eslint src/*.ts",
     "start": "nodemon src/index.ts",
     "test": "npm run build && npm run jasmine",
     "jasmine": "jasmine",
