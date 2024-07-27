@@ -9,8 +9,6 @@ app.use('/api' , routes);
 app.listen(port , ()=> {
   console.log(`Server Started at port : ${port} !`);
 })
-function func (i:number){
-  return i*i;
-}
 
-export default func;
+
+module.exports= app;
