@@ -7,7 +7,7 @@ const { unlink } = require('node:fs/promises');
 const resizer = Express.Router();
 const sharp = require("sharp");
 
-async function resizeImage(w : Number ,  h : Number, picName : String , res : Express.Response) {
+async function resizeImage(w : Number ,  h : Number, picName : String , res : Express.Response) : Promise<void> {
 
     
     try {
@@ -39,7 +39,7 @@ async function resizeImage(w : Number ,  h : Number, picName : String , res : Ex
 }
 
 
-resizer.get('/' , (req , res ) =>{
+resizer.get('/' , (req : Express.Request , res : Express.Response ) : number =>{
 
       // resized image file full path
       const file = `${process.cwd()}/src/images/resized/${req.query.name}-resized-${req.query.width}X${req.query.height}.png`;
