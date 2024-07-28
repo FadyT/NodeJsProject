@@ -6,7 +6,7 @@ import { bool } from "sharp";
 const resizer = Express.Router();
 const sharp = require("sharp");
 
-async function resizeImage(w : Number ,  h : Number, picName : String , res :any) {
+async function resizeImage(w : Number ,  h : Number, picName : String , res : Express.Response) {
 
     
     try {

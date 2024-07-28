@@ -8,6 +8,6 @@ const Resizer_1 = __importDefault(require("./api/Resizer"));
 const routes = express_1.default.Router();
 routes.use('/resizer', Resizer_1.default);
 routes.get('/', (req, res) => {
-    res.send("Main api route !");
+    res.send('Main api route !');
 });
 exports.default = routes;
