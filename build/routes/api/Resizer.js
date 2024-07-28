@@ -17,7 +17,7 @@ const node_fs_1 = require("node:fs");
 const { unlink } = require('node:fs/promises');
 const resizer = express_1.default.Router();
 const sharp = require("sharp");
-function resizeImage(w, h, picName, res) {
+function resizeImage(w, h, picName) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!picName || !w || !h) {
@@ -31,18 +31,13 @@ function resizeImage(w, h, picName, res) {
             })
                 .toFile(`./src/images/resized/${picName}-resized-${w}X${h}.png`);
             console.log("resized image saved !");
-            res.sendFile(process.cwd() + `/src/images/resized/${picName}-resized-${w}X${h}.png`);
         }
         catch (error) {
             if (error == "Error: missing data") {
                 console.log("Can't generate image ");
                 console.log("Data is missing !");
-                res.send("<p>please enter image name , width & height </p>");
+                console.log("File not Found ! " + error);
             }
-            else {
-                res.send("<p>File Not Found please check the name </p>");
-            }
-            console.log("File not Found ! " + error);
         }
     });
 }
@@ -50,7 +45,7 @@ resizer.get('/', (req, res) => {
     // resized image file full path
     const file = `${process.cwd()}/src/images/resized/${req.query.name}-resized-${req.query.width}X${req.query.height}.png`;
     console.log(`looking for image at ${file}`);
-    (0, node_fs_1.access)(file, node_fs_1.constants.F_OK, (check) => {
+    (0, node_fs_1.access)(file, node_fs_1.constants.F_OK, (check) => __awaiter(void 0, void 0, void 0, function* () {
         if (check == null) {
             console.log("Image found ...");
             console.log("loading it from memory ");
@@ -59,12 +54,13 @@ resizer.get('/', (req, res) => {
         else {
             console.log("Image not found ...");
             console.log("Generating image ");
-            resizeImage(Number(req.query.width), Number(req.query.height), String(req.query.name), res);
+            yield resizeImage(Number(req.query.width), Number(req.query.height), String(req.query.name));
+            res.sendFile(process.cwd() + `/src/images/resized/${req.query.name}-resized-${req.query.width}X${req.query.height}.png`);
         }
-    });
+    }));
     return res.statusCode;
 });
-exports.default = resizer;
+exports.default = { resizer, resizeImage };
 /*
 function checkFileExist(path:String) : boolean {
   const file = `${process.cwd()}${path}`;

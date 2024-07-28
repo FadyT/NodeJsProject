@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
+const Resizer_1 = __importDefault(require("../routes/api/Resizer"));
 const app = require('../index');
 const node_fs_1 = __importDefault(require("node:fs"));
 const request = (0, supertest_1.default)(app);
@@ -49,6 +50,14 @@ describe("check if img exist delete it and check if generated after  ", function
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield request.get(`/api/resizer?name=${name}&width=${width}&height=${height}`);
             expect(response.status).toEqual(200);
+        });
+    });
+    it('check if it throw error', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield request.get(`/api/resizer?name=${name}&width=${width}&height=${height}`);
+            expect(() => __awaiter(this, void 0, void 0, function* () {
+                yield Resizer_1.default.resizeImage(500, 250, "sammy");
+            })).not.toThrow();
         });
     });
 });

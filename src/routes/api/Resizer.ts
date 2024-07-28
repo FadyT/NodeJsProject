@@ -7,7 +7,7 @@ const { unlink } = require('node:fs/promises');
 const resizer = Express.Router();
 const sharp = require("sharp");
 
-async function resizeImage(w : Number ,  h : Number, picName : String , res : Express.Response) : Promise<void> {
+async function resizeImage(w : Number ,  h : Number, picName : String ) : Promise<void> {
 
     
     try {
@@ -22,29 +22,23 @@ async function resizeImage(w : Number ,  h : Number, picName : String , res : Ex
       })
       .toFile(`./src/images/resized/${picName}-resized-${w}X${h}.png`);
       console.log("resized image saved !");
-      res.sendFile(process.cwd() +`/src/images/resized/${picName}-resized-${w}X${h}.png`);
   } 
   
   catch (error) {
     if(error == "Error: missing data"){
     console.log("Can't generate image ");
     console.log("Data is missing !");
-
-    res.send("<p>please enter image name , width & height </p>");
-    }else{
-      res.send("<p>File Not Found please check the name </p>");
-    }
     console.log("File not Found ! " + error);
   }
 }
-
+}
 
 resizer.get('/' , (req : Express.Request , res : Express.Response ) : number =>{
 
       // resized image file full path
       const file = `${process.cwd()}/src/images/resized/${req.query.name}-resized-${req.query.width}X${req.query.height}.png`;
       console.log(`looking for image at ${file}`);
-      access(file, constants.F_OK, (check) => {
+      access(file, constants.F_OK, async (check) => {
         if(check == null){
           console.log("Image found ...");
           console.log("loading it from memory ");
@@ -52,13 +46,17 @@ resizer.get('/' , (req : Express.Request , res : Express.Response ) : number =>{
         }else{
           console.log("Image not found ...");
           console.log("Generating image ");
-          resizeImage(Number(req.query.width) ,Number( req.query.height ) ,String( req.query.name) , res);
+          await resizeImage(Number(req.query.width) ,Number( req.query.height ) ,String( req.query.name) );
+          res.sendFile(process.cwd() +`/src/images/resized/${req.query.name}-resized-${req.query.width}X${req.query.height}.png`);
+          
+        
         }
       });
 
   return res.statusCode;
 })
-export default resizer;
+
+export default {resizer , resizeImage};
 
 /*
 function checkFileExist(path:String) : boolean {

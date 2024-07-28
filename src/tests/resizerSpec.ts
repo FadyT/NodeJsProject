@@ -1,4 +1,5 @@
 import supertest from 'supertest';
+import resizer from '../routes/api/Resizer';
 const app = require('../index');
 import fs from 'node:fs';
 
@@ -43,6 +44,15 @@ it('should return 200 response code', async function () {
   );
   expect(response.status).toEqual(200);
   
+});
+
+it('check if it throw error', async function () {
+  const response = await request.get(
+    `/api/resizer?name=${name}&width=${width}&height=${height}`,
+  );
+  expect(async () => {
+    await resizer.resizeImage(500 ,250 ,"sammy" );
+}).not.toThrow();  
 });
 
 });
