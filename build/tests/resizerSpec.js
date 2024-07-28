@@ -14,24 +14,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app = require('../index');
-//const resizer = require('../routes/api/Resizer');
-//import{ checkFileExist ,unlinkFile , request} from '../routes/api/Resizer.ts';
+const node_fs_1 = __importDefault(require("node:fs"));
 const request = (0, supertest_1.default)(app);
-it('should return 200 response code', function () {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield request.get('/api/resizer?name=samy&width=500&height=250');
-        expect(response.status).toEqual(400);
+let name = "sammy";
+let width = 500;
+let height = 250;
+describe("check if img exist delete it and check if generated after  ", function () {
+    let x = 20;
+    const path = `${process.cwd()}/src/images/resized/${name}-resized-${width}X${height}.png`;
+    beforeAll(() => __awaiter(this, void 0, void 0, function* () {
+        if (node_fs_1.default.existsSync(path)) {
+            console.log(path + 'The path exists. ************');
+            yield node_fs_1.default.unlink(path, (err) => {
+                if (err) {
+                    console.log(`ERORR : ${err} -------------------- `);
+                }
+                console.log(`${path} deleted --------------------`);
+            });
+        }
+        else {
+            console.log(path + "The path doesn't exist.************");
+        }
+        x = 25;
+        console.log("number changed to " + x);
+    }));
+    afterAll(() => __awaiter(this, void 0, void 0, function* () {
+        console.log("number was " + x);
+        x = 50;
+        console.log("and changed to " + x);
+        let fileExist = yield node_fs_1.default.existsSync(path);
+        expect(fileExist).toEqual(true);
+    }));
+    it('should return 200 response code', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield request.get(`/api/resizer?name=${name}&width=${width}&height=${height}`);
+            expect(response.status).toEqual(200);
+        });
     });
 });
-/*
-it('test if file exist', async function () {
-  resizer.unlinkFile(`/src/images/resized/samy-resized-500X250.png`);
-  const response = await request.get(
-    '/api/resizer?name=samy&width=500&height=250',
-  );
-  const fileExist = resizer.checkFileExist(`/src/images/resized/samy-resized-500X250.png`);
-  expect(fileExist).toEqual(true);
-});*/
 describe('Server', () => {
     describe('REST API', () => {
         it('Data payload', (done) => {
