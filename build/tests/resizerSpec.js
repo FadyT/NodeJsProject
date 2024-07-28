@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app = require('../index');
+//const resizer = require('../routes/api/Resizer');
+//import{ checkFileExist ,unlinkFile , request} from '../routes/api/Resizer.ts';
 const request = (0, supertest_1.default)(app);
 it('should return 200 response code', function () {
     return __awaiter(this, void 0, void 0, function* () {
@@ -21,6 +23,15 @@ it('should return 200 response code', function () {
         expect(response.status).toEqual(400);
     });
 });
+/*
+it('test if file exist', async function () {
+  resizer.unlinkFile(`/src/images/resized/samy-resized-500X250.png`);
+  const response = await request.get(
+    '/api/resizer?name=samy&width=500&height=250',
+  );
+  const fileExist = resizer.checkFileExist(`/src/images/resized/samy-resized-500X250.png`);
+  expect(fileExist).toEqual(true);
+});*/
 describe('Server', () => {
     describe('REST API', () => {
         it('Data payload', (done) => {

@@ -1,6 +1,7 @@
 import  Express  from "express";
 import { access, constants } from 'node:fs';
 import { bool } from "sharp";
+const { unlink } = require('node:fs/promises');
 
 
 const resizer = Express.Router();
@@ -57,5 +58,38 @@ resizer.get('/' , (req , res ) =>{
 
   return res.statusCode;
 })
-
 export default resizer;
+
+/*
+function checkFileExist(path:String) : boolean {
+  const file = `${process.cwd()}${path}`;
+  let exist:boolean = false;
+  access(file, constants.F_OK, (check) => {
+    if(check == null){
+      console.log("Image found ...");
+      console.log("loading it from memory ");
+      exist = true;
+    }else{
+      console.log("Image not found ...");
+      console.log("Generating image ");
+      exist = false;
+    }
+  });
+  return exist;
+}
+
+async function unlinkFile (path:String) {
+  try {
+    await unlink(path);
+    console.log(`successfully deleted ${path}`);
+  } catch (error) {
+    console.error('there was an error:', error);
+  }
+};
+
+
+module.exports = {
+  resizeImage,
+  checkFileExist,
+  unlinkFile
+}*/
